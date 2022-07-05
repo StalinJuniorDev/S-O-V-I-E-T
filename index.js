@@ -7,7 +7,7 @@ app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
 
 app.get("/", (req, res) => {
-	mongoose.connect(process.env.MONGODB || "mongodb+srv://uzayarsiv:uzayarsiv@cluster0.4fajo.mongodb.net/soviet?retryWrites=true&w=majority", function(err, db) {
+	mongoose.connect(process.env.MONGODB, function(err, db) {
 		const data = db.collection("konu")
 		data.find().sort({ "_id": -1 }).limit(10).toArray(function(err, results) {
 			res.render(process.cwd() + "/views/index.ejs", { results: results })
@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
 	})
 })
 app.get("/kurallar", (req, res) => {
-	mongoose.connect(process.env.MONGODB || "mongodb+srv://uzayarsiv:uzayarsiv@cluster0.4fajo.mongodb.net/soviet?retryWrites=true&w=majority", function(err, db) {
+	mongoose.connect(process.env.MONGODB, function(err, db) {
 		const data = db.collection("konu")
 		data.find().sort({ "_id": -1 }).limit(10).toArray(function(err, results) {
 			res.render(process.cwd() + "/views/kurallar.ejs", { results: results })
@@ -26,7 +26,7 @@ app.post("/", (req, res) => {
 	if(req.body.konu.length === 0 || req.body.kullanici.length === 0 || req.body.baslik.length === 0 || req.body.konu.length === 0){
 		res.redirect("/?hata")
 	}else{
-		mongoose.connect(process.env.MONGODB || "mongodb+srv://uzayarsiv:uzayarsiv@cluster0.4fajo.mongodb.net/soviet?retryWrites=true&w=majority", function(err, db) {
+		mongoose.connect(process.env.MONGODB, function(err, db) {
 			const data = db.collection("konu")
 			data.insert({ kullanici: req.body.kullanici, baslik: req.body.baslik, kategori: req.body.kategori, konu: req.body.konu })
 			res.redirect("/")
@@ -34,7 +34,7 @@ app.post("/", (req, res) => {
 	}
 })
 app.get("/konu/:id", (req, res) => {
-	mongoose.connect(process.env.MONGODB || "mongodb+srv://uzayarsiv:uzayarsiv@cluster0.4fajo.mongodb.net/soviet?retryWrites=true&w=majority", function(err, db) {
+	mongoose.connect(process.env.MONGODB, function(err, db) {
 		const data = db.collection("konu")
 		data.find({ "_id": mongoose.Types.ObjectId(`${req.params.id}`) }).sort({ "_id": -1 }).limit(10).toArray(function(err, results) {
 			data.find().sort({ "_id": -1 }).limit(10).toArray(function(err, comments) {
@@ -51,7 +51,7 @@ app.post("/konu/:id", (req, res) => {
 	if(req.body.yorum.length === 0 || req.body.kullanici.length === 0){
 		res.redirect("/?hata")
 	}else{
-		mongoose.connect(process.env.MONGODB || "mongodb+srv://uzayarsiv:uzayarsiv@cluster0.4fajo.mongodb.net/soviet?retryWrites=true&w=majority", function(err, db) {
+		mongoose.connect(process.env.MONGODB, function(err, db) {
 			const data = db.collection("yorum")
 			data.insert({ id: req.params.id, yorum: req.body.yorum, kullanici: req.body.kullanici })
 			res.redirect(`/konu/${req.params.id}`)
@@ -60,7 +60,7 @@ app.post("/konu/:id", (req, res) => {
 })
 
 app.get("/kategori/:kategori", (req, res) => {
-	mongoose.connect(process.env.MONGODB || "mongodb+srv://uzayarsiv:uzayarsiv@cluster0.4fajo.mongodb.net/soviet?retryWrites=true&w=majority", function(err, db) {
+	mongoose.connect(process.env.MONGODB, function(err, db) {
 		const data = db.collection("konu")
 		data.find({ "kategori": req.params.kategori }).sort({ "_id": -1 }).limit(20).toArray(function(err, results) {
 			data.find().sort({ "_id": -1 }).limit(10).toArray(function(err, comments) {
@@ -75,7 +75,7 @@ app.post("/ara", (req, res) => {
 })
 
 app.get("/ara/:baslik", (req, res) => {
-	mongoose.connect(process.env.MONGODB || "mongodb+srv://uzayarsiv:uzayarsiv@cluster0.4fajo.mongodb.net/soviet?retryWrites=true&w=majority", function(err, db) {
+	mongoose.connect(process.env.MONGODB, function(err, db) {
 		const data = db.collection("konu")
 		data.find({ "baslik": req.params.baslik }).toArray(function(err, results) {
 			data.find().toArray(function(err, comments) {
