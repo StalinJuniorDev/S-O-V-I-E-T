@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include("./header.ejs") %>
+    <br>
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col">
+            <div class="card" style="background-color: #18181b; border: none;">
+                <div class="card-body">
+                    <h4>Konular</h4>
+                <hr>
+                    <% results.forEach(x => { %>
+                        <a href="/konu/<%= x._id %> ">
+                            <div class="card" style="background-color: #27272a; border: none;">
+                                <div class="card-body">
+                                    <h6><%= x.baslik %></h6>
+                                    <p class="text-end">( <%= x.kullanici %> )</p>
+                                </div>
+                            </div>
+                        </a>
+                        <br>    
+                    <%}) %> 
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card" style="background-color: #18181b; border: none;">
+                <div class="card-body">
+                    <h4>En son konular</h4>
+                    <hr>
+                    <% comments.forEach(x => { %>
+                        <a href="/konu/<%= x._id %> ">
+                        <div class="card" style="background-color: #27272a; border: none;">
+                            <div class="card-body">
+                                <h6><%= x.baslik %> </h6>
+                            </div>
+                        </div>
+                    </a> 
+                    <br>   
+                    <% }) %> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

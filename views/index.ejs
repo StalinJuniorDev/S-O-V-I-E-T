@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include("./header.ejs") %>
+    <br>
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col">
+            <div class="card" style="background-color: #18181b; border: none;">
+                <div class="card-body">
+                    <h4>Kategoriler</h4>
+                <hr>
+                    <a href="/kategori/konudisi">
+                        <div class="card" style="background-color: #27272a; border: none;">
+                            <div class="card-body">
+                                <h6>Konu dışı</h6>
+                                <small>Açmak istediğiniz konu diğer kategorilere uymuyorsa bu kategoriyi kullanabilirsiniz</small>
+                            </div>
+                        </div>
+                    </a>
+                    <br>
+                    <a href="/kategori/meme&troll">
+                        <div class="card" style="background-color: #27272a; border: none;">
+                            <div class="card-body">
+                                <h6>MEME & Troll</h6>
+                                <small>Bu konuda mizah ve çeşitli trollükler yapabilirsiniz</small>
+                            </div>
+                        </div>
+                    </a>
+                    <br>
+                    <a href="/kategori/paranormal">
+                        <div class="card" style="background-color: #27272a; border: none;">
+                            <div class="card-body">
+                                <h6>Paranormal</h6>
+                                <small>Bu paranormal olaylar konuşabilirsiniz</small>
+                            </div>
+                        </div>
+                    </a>
+                    <br>
+                    <a href="/kategori/teknoloji">
+                        <div class="card" style="background-color: #27272a; border: none;">
+                            <div class="card-body">
+                                <h6>Teknoloji</h6>
+                                <small>Bu konuda teknoloji hakkında konuşabilirsiniz</small>
+                            </div>
+                        </div>
+                    </a>
+                    <br>
+                    <a href="/kategori/siyaset">
+                        <div class="card" style="background-color: #27272a; border: none;">
+                            <div class="card-body">
+                                <h6>Siyaset</h6>
+                                <small>Bu konuda siyaset yapabilirsiniz</small>
+                            </div>
+                        </div>
+                    </a>
+                    <br>
+                    <a href="/kategori/nsfw">
+                        <div class="card" style="background-color: #27272a; border: none;">
+                            <div class="card-body">
+                                <h6>NSFW / +18</h6>
+                                <small>Bu konuda +18 şeyleri konuşabilirsiniz</small>
+                            </div>
+                        </div>
+                    </a>
+                    <br>
+                    <a href="/kategori/sanat">
+                        <div class="card" style="background-color: #27272a; border: none;">
+                            <div class="card-body">
+                                <h6>Sanat</h6>
+                                <small>Bu konuda sanat ile ilgili konuşmalar yapabilirsiniz Filmler, Diziler Müzikler vb.</small>
+                            </div>
+                        </div>
+                    </a>
+                    <br>
+                    <a href="/kategori/tarih">
+                        <div class="card" style="background-color: #27272a; border: none;">
+                            <div class="card-body">
+                                <h6>Tarih</h6>
+                                <small>Bu konuda tarih ile ilgili konuşmalar yapabilirsiniz</small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card" style="background-color: #18181b; border: none;">
+                <div class="card-body">
+                    <h4>En son konular</h4>
+                    <hr>
+                    <% results.forEach(x => { %>
+                        <a href="/konu/<%= x._id %> ">
+                        <div class="card" style="background-color: #27272a; border: none;">
+                            <div class="card-body">
+                                <h6><%= x.baslik %> </h6>
+                            </div>
+                        </div>
+                    </a> 
+                    <br>   
+                    <% }) %> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
