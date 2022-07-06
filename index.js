@@ -2,6 +2,7 @@ const express = require("express")
 const app = express()
 const mongoose = require("mongoose")
 const bp = require("body-parser")
+const fetch = require("node-fetch")
 
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
