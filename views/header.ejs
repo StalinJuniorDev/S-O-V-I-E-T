@@ -76,6 +76,8 @@
                                         <br>
                                         <textarea name="konu" placeholder="Konu..." rows="5" class="form-control" style="background-color: #27272a; color: #fff; box-shadow: none; border: none; resize: none;"></textarea>
                                         <br>
+                                        <div class="g-recaptcha" data-sitekey="6Le338ogAAAAAHZ1zJlbEzO-aB-cjfI0RQEzrsf0"></div>
+                                        <br>
                                     </div>
                                     <div class="col">
                                         <div class="d-grid gap-2">
@@ -104,3 +106,24 @@
       </div>
     </div>
   </nav>
+          <script>
+            window.onload = function(){
+                fetch("/comments", {method: "GET"})
+                .then(res => res.json())
+                .then(comments => {
+                    comments.length > 0 ? comments.forEach((comment, i) => {
+                        document.getElementById("comments").innerHTML += "<p>"+(comments.length-i)+": "+comment+"</p>"
+                    }) : document.getElementById("comments").innerHTML += "<p>No comments...</p>"
+                })
+            }
+            document.getElementById("commentform").onsubmit = function(e){
+                e.preventDefault()
+
+                //Get the captcha response
+                var formData = new FormData(document.getElementById("commentform"))
+                var captchaResponse = formData.get("g-recaptcha-response")
+
+                fetch("/comments/" + encodeURI(document.querySelector("input[type=text]").value)+"/"+encodeURI(captchaResponse), {method: "POST"})
+                .then(()=>location.reload())
+            }
+        </script>
