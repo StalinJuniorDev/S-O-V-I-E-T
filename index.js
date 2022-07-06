@@ -8,7 +8,7 @@ app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
 
 app.get("/", (req, res) => {
-	mongoose.connect("mongodb+srv://uzayarsiv:uzayarsiv@cluster0.4fajo.mongodb.net/soviet?retryWrites=true&w=majority", function(err, db) {
+	mongoose.connect(process.env.MONGODB, function(err, db) {
 		const data = db.collection("konu")
 		data.find().sort({ "_id": -1 }).limit(10).toArray(function(err, results) {
 			res.render(process.cwd() + "/views/index.ejs", { results: results })
