@@ -23,7 +23,13 @@ app.get("/kurallar", (req, res) => {
 	})
 })
 app.post("/", (req, res) => {
-	if(req.body.konu.length === 0 || req.body.kullanici.length === 0 || req.body.baslik.length === 0 || req.body.konu.length === 0){
+    const captchaVerified = await fetch(process.env.GOOGLE, {
+    method: "POST"
+    })
+        if(captchaVerified.success === false){
+	res.redirect("/?hata")
+	}else{
+		if(req.body.konu.length === 0 || req.body.kullanici.length === 0 || req.body.baslik.length === 0 || req.body.konu.length === 0){
 		res.redirect("/?hata")
 	}else{
 		mongoose.connect(process.env.MONGODB, function(err, db) {
@@ -31,6 +37,7 @@ app.post("/", (req, res) => {
 			data.insert({ kullanici: req.body.kullanici, baslik: req.body.baslik, kategori: req.body.kategori, konu: req.body.konu })
 			res.redirect("/")
 		})
+	}
 	}
 })
 app.get("/konu/:id", (req, res) => {
