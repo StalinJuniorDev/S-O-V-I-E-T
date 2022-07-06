@@ -22,8 +22,8 @@ app.get("/kurallar", (req, res) => {
 		  });
 	})
 })
-app.post("/captcha/:captcharesponse", (req, res) => {
-    const captchaVerified = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=6Le338ogAAAAAKhSg6bKYJqFfIZ9Iocmqx3xSP0E&response=${req.params.captcharesponse}`, {
+app.post("/", (req, res) => {
+    const captchaVerified = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=6Le338ogAAAAAKhSg6bKYJqFfIZ9Iocmqx3xSP0E&response=${req.body.captcharesponse}`, {
     method: "POST"
     })
         if(captchaVerified.success === false){
