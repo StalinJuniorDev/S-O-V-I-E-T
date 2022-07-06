@@ -2,7 +2,6 @@ const express = require("express")
 const app = express()
 const mongoose = require("mongoose")
 const bp = require("body-parser")
-const fetch = require("node-fetch")
 
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
@@ -23,8 +22,8 @@ app.get("/kurallar", (req, res) => {
 		  });
 	})
 })
-app.post("/", (req, res) => {
-    const captchaVerified = await fetch(process.env.GOOGLE, {
+app.post("/captcha/:captcharesponse", (req, res) => {
+    const captchaVerified = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=6Le338ogAAAAAKhSg6bKYJqFfIZ9Iocmqx3xSP0E&response=${req.params.captcharesponse}`, {
     method: "POST"
     })
         if(captchaVerified.success === false){
