@@ -2,12 +2,13 @@ const express = require("express")
 const app = express()
 const mongoose = require("mongoose")
 const bp = require("body-parser")
+const request = require('request');
 
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
 
 app.get("/", (req, res) => {
-	mongoose.connect(process.env.MONGODB, function(err, db) {
+	mongoose.connect("mongodb+srv://uzayarsiv:uzayarsiv@cluster0.4fajo.mongodb.net/soviet?retryWrites=true&w=majority", function(err, db) {
 		const data = db.collection("konu")
 		data.find().sort({ "_id": -1 }).limit(10).toArray(function(err, results) {
 			res.render(process.cwd() + "/views/index.ejs", { results: results })
@@ -23,22 +24,32 @@ app.get("/kurallar", (req, res) => {
 	})
 })
 app.post("/", (req, res) => {
-    const captchaVerified = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=6Le338ogAAAAAKhSg6bKYJqFfIZ9Iocmqx3xSP0E&response=${req.body.captcharesponse}`, {
-    method: "POST"
+
+    if (req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
+        return res.redirect("/?hata")
+    }
+
+    var secretKey = process.argv[2];
+
+    var verificationUrl = process.env.GOOGLE + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
+
+    request(verificationUrl, function (error, response, body) {
+        body = JSON.parse(body);
+
+        if (body.success !== undefined && !body.success) {
+            return res.redirect("/?hata")
+        }else{
+			if(req.body.konu.length === 0 || req.body.kullanici.length === 0 || req.body.baslik.length === 0 || req.body.konu.length === 0){
+				res.redirect("/?hata")
+			}else{
+				mongoose.connect("mongodb+srv://uzayarsiv:uzayarsiv@cluster0.4fajo.mongodb.net/soviet?retryWrites=true&w=majority", function(err, db) {
+					const data = db.collection("konu")
+					data.insert({ kullanici: req.body.kullanici, baslik: req.body.baslik, kategori: req.body.kategori, konu: req.body.konu })
+					res.redirect("/")
+				})
+			}
+		}
     })
-        if(captchaVerified.success === false){
-	res.redirect("/?hata")
-	}else{
-		if(req.body.konu.length === 0 || req.body.kullanici.length === 0 || req.body.baslik.length === 0 || req.body.konu.length === 0){
-		res.redirect("/?hata")
-	}else{
-		mongoose.connect(process.env.MONGODB, function(err, db) {
-			const data = db.collection("konu")
-			data.insert({ kullanici: req.body.kullanici, baslik: req.body.baslik, kategori: req.body.kategori, konu: req.body.konu })
-			res.redirect("/")
-		})
-	}
-	}
 })
 app.get("/konu/:id", (req, res) => {
 	mongoose.connect(process.env.MONGODB, function(err, db) {
@@ -55,6 +66,20 @@ app.get("/konu/:id", (req, res) => {
 })
 
 app.post("/konu/:id", (req, res) => {
+	if (req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
+        return res.redirect("/?hata")
+    }
+
+    var secretKey = process.argv[2];
+
+    var verificationUrl = process.env.GOOGLE + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
+
+    request(verificationUrl, function (error, response, body) {
+        body = JSON.parse(body);
+
+        if (body.success !== undefined && !body.success) {
+            return res.redirect("/?hata")
+        }else{
 	if(req.body.yorum.length === 0 || req.body.kullanici.length === 0){
 		res.redirect("/?hata")
 	}else{
@@ -64,6 +89,8 @@ app.post("/konu/:id", (req, res) => {
 			res.redirect(`/konu/${req.params.id}`)
 		})
 	}
+}
+	})
 })
 
 app.get("/kategori/:kategori", (req, res) => {

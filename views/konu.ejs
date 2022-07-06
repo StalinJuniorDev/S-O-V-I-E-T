@@ -46,7 +46,7 @@
                                                         <div class="container">
                                                             <h4><i class="fa-regular fa-comment"></i> Yorum yap</h4>
                                                             <hr>
-                                                            <form action="/konu/<%= x._id %>" method="post">
+                                                            <form action="/konu/<%= x._id %>" method="post" id="yorum">
                                                                 <input name="kullanici" type="text" class="form-control" style="background-color: #27272a; color: #fff; box-shadow: none; border: none;" placeholder="Kullanıcı adı">
                                                             <br>
                                                             <textarea name="yorum" placeholder="Yorum..." rows="5" class="form-control" style="background-color: #27272a; color: #fff; box-shadow: none; border: none; resize: none;"></textarea>
@@ -101,3 +101,20 @@
 </div>
 </body>
 </html>
+<script>
+    $(document).ready(function () {
+        $('#yorum').submit(function () {
+            $(this).ajaxSubmit({
+                error: function (xhr) {
+                    $('#result').text('Error: ' + xhr.status);
+                },
+                success: function (response) {
+                    $('#result').text(response.message);
+                }
+            });
+            //Very important line, it disable the page refresh.
+            return false;
+        });
+    });
+
+</script>
