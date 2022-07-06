@@ -2,41 +2,9 @@ const express = require("express")
 const app = express()
 const mongoose = require("mongoose")
 const bp = require("body-parser")
-const fetch = require('node-fetch');
-const { stringify } = require('querystring');
 
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
-
-app.use(express.json());
-
-app.get('/subscribe', (_, res) => res.sendFile(__dirname + '/index.html'));
-
-app.post('/subscribe', async (req, res) => {
-  if (!req.body.captcha)
-    return res.json({ success: false, msg: 'Please select captcha' });
-
-  // Secret key
-  const secretKey = '6Le338ogAAAAAHZ1zJlbEzO-aB-cjfI0RQEzrsf0';
-
-  // Verify URL
-  const query = stringify({
-    secret: secretKey,
-    response: req.body.captcha,
-    remoteip: req.connection.remoteAddress
-  });
-  const verifyURL = `https://google.com/recaptcha/api/siteverify?${query}`;
-
-  // Make a request to verifyURL
-  const body = await fetch(verifyURL).then(res => res.json());
-
-  // If not successful
-  if (body.success !== undefined && !body.success)
-    return res.json({ success: false, msg: 'Failed captcha verification' });
-
-  // If successful
-  return res.json({ success: true, msg: 'Captcha passed' });
-});
 
 app.get("/", (req, res) => {
 	mongoose.connect(process.env.MONGODB, function(err, db) {
